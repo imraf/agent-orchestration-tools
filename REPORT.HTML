@@ -27,23 +27,99 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        /* Card Styling */
+        /* Card Styling & Theming */
         .framework-card {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
+            border-radius: 16px; /* Slightly rounder for modern look */
             padding: 1.5rem;
             height: 100%;
-            transition: all 0.2s ease-in-out;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+
+        /* 
+           Theme: Code-First
+           Vibe: Matrix, Terminal, Deep Tech
+           Colors: Deep Teal/Cyan background with Neon Cyan accents
+        */
+        .framework-card[data-category="code-first"] {
+            background: linear-gradient(160deg, #0f2937 0%, #081822 100%);
+            border-color: #164e63;
+            --theme-color: #22d3ee;
+            --theme-label: #67e8f9;
+            --theme-dim: rgba(34, 211, 238, 0.1);
+        }
+
+        /* 
+           Theme: Visual / Low-Code
+           Vibe: Creative, Canvas, flow
+           Colors: Deep Plum/Purple background with Hot Pink accents
+        */
+        .framework-card[data-category="visual"] {
+            background: linear-gradient(160deg, #2e1065 0%, #18082f 100%);
+            border-color: #581c87;
+            --theme-color: #f472b6;
+            --theme-label: #fbcfe8;
+            --theme-dim: rgba(244, 114, 182, 0.1);
+        }
+
+        /* 
+           Theme: Enterprise
+           Vibe: Trust, Cloud, Scale
+           Colors: Deep Navy/Royal background with Indigo accents
+        */
+        .framework-card[data-category="enterprise"] {
+            background: linear-gradient(160deg, #172554 0%, #0a122e 100%);
+            border-color: #1e3a8a;
+            --theme-color: #818cf8;
+            --theme-label: #c7d2fe;
+            --theme-dim: rgba(129, 140, 248, 0.1);
         }
 
         .framework-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-            border-color: #38bdf8;
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4), 0 0 20px -5px var(--theme-dim);
+            border-color: var(--theme-color);
+        }
+        
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--theme-color);
+            text-decoration: none;
+            transition: color 0.2s;
+            letter-spacing: -0.02em;
+        }
+        
+        .card-badge {
+            font-size: 0.7rem;
+            padding: 0.3em 0.8em;
+            border-radius: 9999px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--theme-color);
+            color: var(--theme-color);
+            box-shadow: 0 0 10px var(--theme-dim);
+        }
+
+        .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--theme-label); /* Adapts label color to theme */
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            opacity: 0.8;
+        }
+
+        .value {
+            color: #f8fafc; /* Ultra bright white-ish for best contrast on dark bg */
+            line-height: 1.4;
         }
         
         .category-pill {
@@ -79,24 +155,11 @@
             margin-bottom: 0.5rem;
         }
 
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #38bdf8;
-            text-decoration: none;
-        }
-        
         .card-title:hover {
             text-decoration: underline;
         }
 
-        .card-badge {
-            font-size: 0.7rem;
-            padding: 0.2em 0.6em;
-            border-radius: 9999px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
+        /* .card-badge replaced in previous block to support theming */
 
         .card-body {
             display: grid;
@@ -215,7 +278,7 @@
 
             // Enterprise
             { name: "Microsoft Agent Framework", url: "https://azure.microsoft.com/en-us/products/ai-agent-service/", philosophy: "Unified, Type-Safe", prof: "High", setup: "Medium-Hard", deploy: "Azure Cloud", usecase: "Auditable finance/enterprise systems.", observ: "High", cost: "Azure", category: "enterprise" },
-            { name: "Vertex AI Agents", url: "https://cloud.google.com/vertex-ai/docs/agent-builder/overview", philosophy: "Managed Grounding", prof: "Medium (Cloud Eng)", setup: "Medium", deploy: "Google Cloud", usecase: "Enterprise search & support bots.", observ: "High", cost: "Pay-per-use", category: "enterprise" },
+            { name: "Vertex AI Agents", url: "https://cloud.google.com/vertex-ai/docs/agent-builder/overview", philosophy: "Managed Grounding", prof: "Medium (Cloud Eng)", setup: "Medium", deploy: "Google Cloud", usecase: "Enterprise search & support bots.", observ: "High", cost: "Paid", category: "enterprise" },
         ];
 
         const container = document.getElementById('cards-container');
@@ -242,24 +305,29 @@
             data.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'framework-card';
+                card.setAttribute('data-category', item.category); // Add data attribute for theming
                 
                 const profClass = getProficiencyClass(item.prof);
                 
+                // Note: card-badge no longer uses profClass for background color to keep it cleaner
+                // but we can keep the profClass for potential future use or specific overrides if needed.
+                // We'll update the innerHTML to reflect the new cleaner badge style.
+
                 card.innerHTML = `
                     <div class="card-header">
                         <a href="${item.url}" target="_blank" class="card-title">${item.name}</a>
-                        <span class="card-badge ${profClass}">${item.cost}</span>
+                        <span class="card-badge">${item.cost}</span>
                     </div>
                     
                     <div class="card-body">
                         <div class="card-row">
                             <span class="label">Philosophy</span>
-                            <span class="value text-white font-medium">${item.philosophy}</span>
+                            <span class="value font-medium">${item.philosophy}</span>
                         </div>
                         
                         <div class="card-row">
                             <span class="label">Best Use Case</span>
-                            <span class="value italic text-slate-300">"${item.usecase}"</span>
+                            <span class="value italic opacity-90">"${item.usecase}"</span>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2 mt-2">
@@ -275,12 +343,12 @@
 
                         <div class="card-row mt-1">
                              <span class="label">Proficiency Req.</span>
-                             <span class="value text-sm text-sky-200">${item.prof}</span>
+                             <span class="value text-sm">${item.prof}</span>
                         </div>
                         
                          <div class="card-row">
                              <span class="label">Deployment</span>
-                             <span class="value text-xs text-slate-400 font-mono">${item.deploy}</span>
+                             <span class="value text-xs font-mono opacity-70">${item.deploy}</span>
                         </div>
                     </div>
                 `;
