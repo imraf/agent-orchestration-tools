@@ -106,6 +106,8 @@
             border: 1px solid var(--theme-color);
             color: var(--theme-color);
             box-shadow: 0 0 10px var(--theme-dim);
+            white-space: nowrap; /* Prevent badge text from wrapping */
+            flex-shrink: 0;      /* Prevent badge from shrinking */
         }
 
         .label {
