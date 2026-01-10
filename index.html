@@ -250,7 +250,7 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 2rem;
-            margin-top: 5rem;
+            margin-top: 2rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid #334155;
         }
@@ -319,13 +319,12 @@
             <p class="text-sm text-slate-500 mt-2">Last Updated: January 2025</p>
         </header>
 
-        <!-- Filters -->
+        <!-- Filters (Frameworks Only) -->
         <div class="flex flex-wrap gap-2 mb-6 justify-center" id="category-filters">
-            <button class="category-pill active px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="all">All Tools</button>
-            <button class="category-pill px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="code-first">Code-First Frameworks</button>
+            <button class="category-pill active px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="all">All Frameworks</button>
+            <button class="category-pill px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="code-first">Code-First</button>
             <button class="category-pill px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="visual">Visual / Low-Code</button>
-            <button class="category-pill px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="enterprise">Enterprise / Managed</button>
-            <button class="category-pill px-4 py-2 rounded-full border border-slate-600 hover:border-yellow-400 text-sm" data-filter="benchmark">Benchmarking</button>
+            <button class="category-pill px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="enterprise">Enterprise</button>
         </div>
 
         <!-- Search -->
@@ -334,7 +333,17 @@
         </div>
 
         <!-- Main Card Container -->
-        <div id="cards-container" class="cards-grid mb-12"></div>
+        <h2 class="text-3xl font-bold mb-2 tracking-tight text-white">Frameworks & Platforms</h2>
+            <p class="text-lg text-slate-400 mb-8">Tools and frameworks for agentic workflows, orchestration and agent communication.</p>
+        <div id="cards-container" class="cards-grid mb-20"></div>
+
+        <!-- Benchmarking Section -->
+        <div class="border-t border-slate-700 pt-16">
+            <h2 class="text-3xl font-bold mb-2 tracking-tight text-white">Benchmarking Ecosystem</h2>
+            <p class="text-lg text-slate-400 mb-8">Tools, datasets, and standards for evaluating agent performance and reliability.</p>
+            
+            <div id="benchmark-container" class="cards-grid mb-12"></div>
+        </div>
 
         <!-- Benchmarking Methods Section -->
         <div class="mt-20">
@@ -423,7 +432,8 @@
             { name: "WebArena", url: "https://webarena.dev/", philosophy: "Realistic Web Tasks", prof: "High", setup: "Hard (Docker)", deploy: "Local Environment", usecase: "Agents that navigate and act on websites.", observ: "N/A", cost: "OSS", category: "benchmark-dataset" },
         ];
 
-        const container = document.getElementById('cards-container');
+        const frameworksContainer = document.getElementById('cards-container');
+        const benchmarkContainer = document.getElementById('benchmark-container');
         const searchInput = document.getElementById('search-input');
         let currentFilter = 'all';
 
@@ -435,93 +445,105 @@
             return 'badge-med';
         };
 
-        // Render Cards
-        const renderCards = (data) => {
-            container.innerHTML = '';
+        // Render Single Card
+        const createCardElement = (item) => {
+            const card = document.createElement('div');
+            card.className = 'framework-card';
+            card.setAttribute('data-category', item.category);
             
-            if (data.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center text-slate-500 py-12">No frameworks found matching your criteria.</div>';
-                return;
-            }
-
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'framework-card';
-                card.setAttribute('data-category', item.category); // Add data attribute for theming
+            card.innerHTML = `
+                <div class="card-header">
+                    <a href="${item.url}" target="_blank" class="card-title">${item.name}</a>
+                    <span class="card-badge">${item.cost}</span>
+                </div>
                 
-                const profClass = getProficiencyClass(item.prof);
-                
-                // Note: card-badge no longer uses profClass for background color to keep it cleaner
-                // but we can keep the profClass for potential future use or specific overrides if needed.
-                // We'll update the innerHTML to reflect the new cleaner badge style.
-
-                card.innerHTML = `
-                    <div class="card-header">
-                        <a href="${item.url}" target="_blank" class="card-title">${item.name}</a>
-                        <span class="card-badge">${item.cost}</span>
+                <div class="card-body">
+                    <div class="card-row">
+                        <span class="label">Philosophy</span>
+                        <span class="value font-medium">${item.philosophy}</span>
                     </div>
                     
-                    <div class="card-body">
-                        <div class="card-row">
-                            <span class="label">Philosophy</span>
-                            <span class="value font-medium">${item.philosophy}</span>
-                        </div>
-                        
-                        <div class="card-row">
-                            <span class="label">Best Use Case</span>
-                            <span class="value italic opacity-90">"${item.usecase}"</span>
-                        </div>
+                    <div class="card-row">
+                        <span class="label">Best Use Case</span>
+                        <span class="value italic opacity-90">"${item.usecase}"</span>
+                    </div>
 
-                        <div class="grid grid-cols-2 gap-2 mt-2">
-                             <div class="card-row">
-                                <span class="label">Setup</span>
-                                <span class="value">${item.setup}</span>
-                            </div>
-                             <div class="card-row">
-                                <span class="label">Observability</span>
-                                <span class="value">${item.observ}</span>
-                            </div>
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                            <div class="card-row">
+                            <span class="label">Setup</span>
+                            <span class="value">${item.setup}</span>
                         </div>
-
-                        <div class="card-row mt-1">
-                             <span class="label">Proficiency Req.</span>
-                             <span class="value text-sm">${item.prof}</span>
-                        </div>
-                        
-                         <div class="card-row">
-                             <span class="label">Deployment</span>
-                             <span class="value text-xs font-mono opacity-70">${item.deploy}</span>
+                            <div class="card-row">
+                            <span class="label">Observability</span>
+                            <span class="value">${item.observ}</span>
                         </div>
                     </div>
-                `;
-                container.appendChild(card);
-            });
+
+                    <div class="card-row mt-1">
+                            <span class="label">Proficiency Req.</span>
+                            <span class="value text-sm">${item.prof}</span>
+                    </div>
+                    
+                        <div class="card-row">
+                            <span class="label">Deployment</span>
+                            <span class="value text-xs font-mono opacity-70">${item.deploy}</span>
+                    </div>
+                </div>
+            `;
+            return card;
+        };
+
+        // Main Render Function
+        const render = (frameworks, benchmarks) => {
+            // Render Frameworks
+            frameworksContainer.innerHTML = '';
+            if (frameworks.length === 0) {
+                frameworksContainer.innerHTML = '<div class="col-span-full text-center text-slate-500 py-12">No frameworks found matching your criteria.</div>';
+            } else {
+                frameworks.forEach(item => {
+                    frameworksContainer.appendChild(createCardElement(item));
+                });
+            }
+
+            // Render Benchmarks
+            benchmarkContainer.innerHTML = '';
+            if (benchmarks.length === 0) {
+                benchmarkContainer.innerHTML = '<div class="col-span-full text-center text-slate-500 py-12">No benchmarking tools found matching your search.</div>';
+            } else {
+                benchmarks.forEach(item => {
+                    benchmarkContainer.appendChild(createCardElement(item));
+                });
+            }
         };
 
         // Filtering Logic
         const filterData = () => {
             const searchTerm = searchInput.value.toLowerCase();
             
-            const filtered = rawData.filter(item => {
-                // Category Filter
-                let categoryMatch = currentFilter === 'all' || item.category === currentFilter;
-                
-                // Special handling for the "Benchmarking" filter group
-                if (currentFilter === 'benchmark') {
-                    categoryMatch = item.category.startsWith('benchmark');
-                }
-                
-                // Search Filter
+            // 1. First, separate data into two buckets based on type
+            const allBenchmarks = rawData.filter(item => item.category.startsWith('benchmark'));
+            const allFrameworks = rawData.filter(item => !item.category.startsWith('benchmark'));
+
+            // 2. Filter Frameworks (Apply BOTH search AND category buttons)
+            const filteredFrameworks = allFrameworks.filter(item => {
+                const categoryMatch = currentFilter === 'all' || item.category === currentFilter;
                 const searchMatch = 
                     item.name.toLowerCase().includes(searchTerm) ||
                     item.philosophy.toLowerCase().includes(searchTerm) ||
                     item.usecase.toLowerCase().includes(searchTerm) ||
                     item.prof.toLowerCase().includes(searchTerm);
-
                 return categoryMatch && searchMatch;
             });
 
-            renderCards(filtered);
+            // 3. Filter Benchmarks (Apply ONLY search, ignore category buttons)
+            const filteredBenchmarks = allBenchmarks.filter(item => {
+                return item.name.toLowerCase().includes(searchTerm) ||
+                       item.philosophy.toLowerCase().includes(searchTerm) ||
+                       item.usecase.toLowerCase().includes(searchTerm) ||
+                       item.prof.toLowerCase().includes(searchTerm);
+            });
+
+            render(filteredFrameworks, filteredBenchmarks);
         };
 
         // Event Listeners
@@ -537,7 +559,7 @@
         searchInput.addEventListener('input', filterData);
 
         // Initial Render
-        renderCards(rawData);
+        filterData();
 
     </script>
 </body>
