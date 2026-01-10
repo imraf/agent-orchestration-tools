@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Orchestration Landscape | 2025 Survey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/gridjs/6.0.6/theme/mermaid.min.css" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            border-color: #60a5fa;
+        }
+
+        /* GridJS Customization */
+        .gridjs-container {
+            color: #cbd5e1;
+            font-family: 'Inter', sans-serif;
+            background: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .gridjs-wrapper {
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background-color: #1e293b; /* Match container background */
+        }
+        .gridjs-head {
+            background-color: #0f172a;
+        }
+        .gridjs-th {
+            background-color: #0f172a;
+            color: #38bdf8;
+            border-bottom: 2px solid #334155;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        .gridjs-td {
+            background-color: #1e293b;
+            border-bottom: 1px solid #334155;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+        .gridjs-tr:hover .gridjs-td {
+            background-color: #334155;
+        }
+        .gridjs-footer {
+            background-color: #0f172a;
+            border-top: 1px solid #334155;
+            display: none; /* Hide footer for non-paginated view if not needed, or style it */
+        }
+        .gridjs-search-input {
+            background-color: #1e293b;
+            color: #fff;
+            border: 1px solid #475569;
+        }
+        input.gridjs-input:focus {
+            border-color: #38bdf8;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+
+        /* Proficiency Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25em 0.6em;
+            font-size: 0.75em;
+            font-weight: 700;
+            border-radius: 999px;
+            text-transform: uppercase;
+        }
+        .badge-low { background-color: #10b981; color: #064e3b; }
+        .badge-med { background-color: #f59e0b; color: #78350f; }
+        .badge-high { background-color: #ef4444; color: #7f1d1d; }
+
+        .category-pill {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .category-pill.active {
+            background-color: #38bdf8;
+            color: #0f172a;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="mb-12 text-center">
+            <h1 class="text-5xl font-bold mb-4 tracking-tight">Agent Orchestration <span class="gradient-text">Landscape</span></h1>
+            <p class="text-xl text-slate-400">A comprehensive survey of AI agent frameworks, tools, and platforms.</p>
+            <p class="text-sm text-slate-500 mt-2">Last Updated: January 2025</p>
+        </header>
+
+        <!-- Insights Grid -->
+        <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="card p-6 rounded-xl">
+                <h3 class="text-lg font-semibold text-sky-400 mb-2">Trend: The Graph Era</h3>
+                <p class="text-slate-300 text-sm">
+                    Move over purely autonomous chains. 2025 is dominated by <strong>Graph-based</strong> and <strong>State-Machine</strong> architectures (LangGraph, LlamaIndex Workflows), prioritizing control, loops, and "time-travel" debugging over chaotic autonomy.
+                </p>
+            </div>
+            <div class="card p-6 rounded-xl">
+                <h3 class="text-lg font-semibold text-sky-400 mb-2">Code vs. No-Code</h3>
+                <p class="text-slate-300 text-sm">
+                    A clear bifurcation: <strong>Code-first frameworks</strong> (Phidata, PydanticAI) focus on type-safety and production rigor, while <strong>Visual tools</strong> (Flowise, n8n) rapidly democratize simple agentic workflows for business ops.
+                </p>
+            </div>
+            <div class="card p-6 rounded-xl">
+                <h3 class="text-lg font-semibold text-sky-400 mb-2">Enterprise Grounding</h3>
+                <p class="text-slate-300 text-sm">
+                    Reliability is king. Tools like <strong>Semantic Kernel</strong> and <strong>Vertex AI</strong> are winning in enterprise by treating agents as "Middleware" with strict governance, rather than just magic boxes.
+                </p>
+            </div>
+        </div> -->
+
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-2 mb-6 justify-center" id="category-filters">
+            <button class="category-pill active px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="all">All Tools</button>
+            <button class="category-pill px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="code-first">Code-First Frameworks</button>
+            <button class="category-pill px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="visual">Visual / Low-Code</button>
+            <button class="category-pill px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm" data-filter="enterprise">Enterprise / Managed</button>
+        </div>
+
+        <!-- Main Table Container -->
+        <div id="grid-container" class="mb-12"></div>
+
+        <!-- Footer -->
+        <footer class="text-center text-slate-500 text-sm mt-16 pb-8">
+            <p>Generated by OpenCode Agent • Q1 2025 Data Survey</p>
+        </footer>
+    </div>
+
+    <!-- GridJS Lib -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gridjs/6.0.6/gridjs.production.min.js"></script>
+    
+    <script>
+        // Data Source
+        const rawData = [
+            // Code First
+            { name: "Microsoft AutoGen", url: "https://microsoft.github.io/autogen/", philosophy: "Conversational, Multi-Agent", prof: "High (Python)", setup: "Medium", deploy: "Local / Cloud / Docker", usecase: "Complex multi-agent simulations, code execution.", observ: "Medium", cost: "OSS", category: "code-first" },
+            { name: "Semantic Kernel", url: "https://learn.microsoft.com/en-us/semantic-kernel/", philosophy: "Middleware, Type-safe", prof: "Medium (C#/Py/Java)", setup: "Easy", deploy: "Serverless / Local", usecase: "Enterprise apps, Polyglot integration.", observ: "High", cost: "OSS", category: "code-first" },
+            { name: "LangGraph", url: "https://langchain-ai.github.io/langgraph/", philosophy: "Cyclic State Machines", prof: "High (AI Engineer)", setup: "Hard", deploy: "Cloud / Local", usecase: "Complex stateful agents, loops, human-in-loop.", observ: "Very High", cost: "OSS / SaaS", category: "code-first" },
+            { name: "CrewAI", url: "https://crewai.com/", philosophy: "Role-Based Collaboration", prof: "Medium (Data Scientist)", setup: "Easy", deploy: "Cloud / Local", usecase: "Rapid prototyping of content/research teams.", observ: "Medium", cost: "OSS / Pro", category: "code-first" },
+            { name: "Smolagents", url: "https://github.com/huggingface/smolagents", philosophy: "Code-as-Action", prof: "Medium-High (Python)", setup: "Easy", deploy: "Local + Sandbox", usecase: "Technical agents (coding, data analysis).", observ: "Medium", cost: "OSS", category: "code-first" },
+            { name: "LlamaIndex Agents", url: "https://docs.llamaindex.ai/en/stable/module_guides/deploying/agents/", philosophy: "Data-centric, Event-driven", prof: "Medium", setup: "Medium", deploy: "Cloud / Local", usecase: "RAG-heavy agents, document processing.", observ: "High", cost: "OSS / SaaS", category: "code-first" },
+            { name: "Haystack", url: "https://haystack.deepset.ai/", philosophy: "Pipeline-based", prof: "Medium", setup: "Easy", deploy: "Local / Cloud", usecase: "Production RAG pipelines, Search/QA.", observ: "High", cost: "OSS / SaaS", category: "code-first" },
+            { name: "Phidata", url: "https://phidata.com/", philosophy: "Memory & Tools", prof: "Medium", setup: "Easy", deploy: "Docker / AWS", usecase: "Agents needing long-term memory/DBs.", observ: "High", cost: "OSS / SaaS", category: "code-first" },
+            { name: "ControlFlow", url: "https://github.com/PrefectHQ/controlflow", philosophy: "Task-centric Flows", prof: "Medium (Python)", setup: "Easy", deploy: "Any Python Env", usecase: "Mixing strict logic with AI tasks.", observ: "Very High", cost: "OSS / SaaS", category: "code-first" },
+            { name: "PydanticAI", url: "https://ai.pydantic.dev/", philosophy: "Type-safe Validation", prof: "Medium", setup: "Easy", deploy: "Any Python Env", usecase: "Robust, schema-validated production agents.", observ: "High", cost: "OSS", category: "code-first" },
+            { name: "OpenAI Swarm", url: "https://github.com/openai/swarm", philosophy: "Client-side Handoffs", prof: "Low (Python)", setup: "Very Easy", deploy: "Client / Server", usecase: "Educational, explicit handoff control.", observ: "Low", cost: "OSS", category: "code-first" },
+            { name: "MetaGPT", url: "https://github.com/geekan/MetaGPT", philosophy: "SOP / Role-playing", prof: "Medium", setup: "Medium", deploy: "Local / Docker", usecase: "Software company simulation (PRD->Code).", observ: "Medium", cost: "OSS", category: "code-first" },
+
+            // Visual / Low Code
+            { name: "n8n", url: "https://n8n.io/", philosophy: "Visual Workflow", prof: "Low-Medium (Ops)", setup: "Easy", deploy: "Self / SaaS", usecase: "Business process automation.", observ: "Medium", cost: "Source-Avail", category: "visual" },
+            { name: "Flowise", url: "https://flowiseai.com/", philosophy: "Drag-and-Drop Chains", prof: "Low (Web Dev)", setup: "Easy", deploy: "Local / Node.js", usecase: "Website chatbots, simple RAG.", observ: "Low-Medium", cost: "OSS", category: "visual" },
+            { name: "Relevance AI", url: "https://relevanceai.com/", philosophy: "B2B Workforce", prof: "Very Low", setup: "Very Easy", deploy: "SaaS Only", usecase: "Sales/HR pre-built workers.", observ: "Low", cost: "SaaS", category: "visual" },
+            { name: "SuperAGI", url: "https://superagi.com/", philosophy: "Autonomous GUI", prof: "Low (UI) / High (Dev)", setup: "Medium", deploy: "Docker / Cloud", usecase: "Autonomous task runners (Marketing).", observ: "High", cost: "OSS / Cloud", category: "visual" },
+
+            // Enterprise
+            { name: "Microsoft Agent Framework", url: "https://azure.microsoft.com/en-us/products/ai-agent-service/", philosophy: "Unified, Type-Safe", prof: "High", setup: "Medium-Hard", deploy: "Azure Cloud", usecase: "Auditable finance/enterprise systems.", observ: "High", cost: "Azure", category: "enterprise" },
+            { name: "Vertex AI Agents", url: "https://cloud.google.com/vertex-ai/docs/agent-builder/overview", philosophy: "Managed Grounding", prof: "Medium (Cloud Eng)", setup: "Medium", deploy: "Google Cloud", usecase: "Enterprise search & support bots.", observ: "High", cost: "Pay-per-use", category: "enterprise" },
+        ];
+
+        // Helper to render badges
+        const renderProficiency = (data) => {
+            const lower = data.toLowerCase();
+            let cls = 'badge-med';
+            if (lower.includes('low')) cls = 'badge-low';
+            if (lower.includes('high')) cls = 'badge-high';
+            return gridjs.html(`<span class="badge ${cls}">${data}</span>`);
+        };
+
+        const renderName = (data, row) => {
+            // Assuming row data is accessible or we find the URL another way.
+            // GridJS formatter passes cell data. We might need the full row to get the URL if we didn't pass it in the cell.
+            // Let's pass the object {name, url} to the cell instead of just name.
+             return gridjs.html(`<a href="${data.url}" target="_blank" class="font-bold text-sky-400 hover:text-sky-300 hover:underline transition-colors">${data.name}</a>`);
+        }
+
+        // Initialize Grid
+        const grid = new gridjs.Grid({
+            columns: [
+                { 
+                    name: "Framework", 
+                    formatter: (cell) => renderName(cell)
+                },
+                { name: "Core Philosophy", width: '15%' },
+                { name: "Proficiency", formatter: (cell) => renderProficiency(cell) },
+                "Setup",
+                "Deployment",
+                { name: "Best Use Case", width: '20%' },
+                "Observability",
+                "Cost"
+            ],
+            data: rawData.map(d => [{name: d.name, url: d.url}, d.philosophy, d.prof, d.setup, d.deploy, d.usecase, d.observ, d.cost]),
+            search: {
+                enabled: true
+            },
+            sort: true,
+            pagination: false, // Disable pagination
+            style: {
+                table: {
+                    'white-space': 'nowrap'
+                }
+            },
+            className: {
+                table: 'w-full text-left',
+            }
+        }).render(document.getElementById("grid-container"));
+
+        // Filter Logic
+        document.querySelectorAll('.category-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update UI
+                document.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Filter Data
+                const filter = btn.dataset.filter;
+                let filteredData = rawData;
+                
+                if (filter !== 'all') {
+                    filteredData = rawData.filter(item => item.category === filter);
+                }
+
+                // Update Grid
+                grid.updateConfig({
+                    data: filteredData.map(d => [{name: d.name, url: d.url}, d.philosophy, d.prof, d.setup, d.deploy, d.usecase, d.observ, d.cost])
+                }).forceRender();
+            });
+        });
+
+    </script>
+</body>
+</html>
