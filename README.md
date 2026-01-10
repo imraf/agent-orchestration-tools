@@ -14,14 +14,17 @@ The project features a responsive web interface that categorizes tools into key 
 
 ## Contributing
 
-Contributions are welcome. Let's keep this landscape accurate and up-to-date!
+Contributions are welcome.
 
-### How to Contribute
+### How to Contribute: Adding Items
 1.  **Add a Framework:** If a tool is missing, please submit a Pull Request adding it to the `rawData` array in `index.html`. Ensure all fields (philosophy, proficiency, setup, etc.) are completed.
 2.  **Update Data:** Correct outdated information regarding features, pricing models, or documentation links.
-3.  **Enhance the UI:** Improvements to the visualization, filtering logic, or design are encouraged.
 
-Please ensure all submissions adhere to the existing code style and structure.
+### Contribute: Improve Web Page
+The web page can be improved in various ways. For now, it's just a quick single-page HTML. 
+1.  **Enhance the UI:** Improvements to the visualization, filtering logic, or design are encouraged.
+2.  **Improve Code Structure**: Separate logic from data (move CSS and JS to separate files).
+3.  **Add Examples**: Find good examples and add them in a way the fits the design.
 
 ## License
 
