@@ -1,6 +1,6 @@
 # Agent Orchestration Landscape Survey
 
-![Agent Orchestration Landscape](./media/screenshot.jpg)
+![Agent Orchestration Landscape](./media/thumbnail.jpg)
 
 ## Overview
 
